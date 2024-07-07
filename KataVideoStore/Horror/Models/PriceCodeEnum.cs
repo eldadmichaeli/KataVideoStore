@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace KataVideoStore.Horror.Models
 {
-    public enum PriceCode
+    public enum PriceCodeEnum
     {
         Regular = 0,
         NewRelease = 1,

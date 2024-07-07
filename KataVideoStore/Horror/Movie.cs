@@ -4,23 +4,14 @@ namespace KataVideoStore.Horror
 {
     public class Movie
     {
+        public PriceCodeEnum PriceCode { get; set; }
+        public string Title { get; private set; }
 
-
-        private string _title;
-        private PriceCode _priceCode;
-
-        public Movie(string title, PriceCode priceCode)
+        public Movie(string title, PriceCodeEnum priceCodeEnum)
         {
-            _title = title;
-            _priceCode = priceCode;
+            Title = title;
+            PriceCode = priceCodeEnum;
         }
-
-        public PriceCode GetPriceCode() { return _priceCode; }
-
-        public void SetPriceCode(PriceCode arg) { _priceCode = arg; }
-
-        public string GetTitle() { return _title; }
-
-
+        
     }
 }
