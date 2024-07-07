@@ -4,12 +4,12 @@
 
     public class Customer
     {
-        private string name;
-        private Dictionary<Movie, int> rentals = new Dictionary<Movie, int>();
+        public string CustomerName { get; }
+        private readonly Dictionary<Movie, int> rentals = new Dictionary<Movie, int>();
 
-        public Customer(string name)
+        public Customer(string customerName)
         {
-            this.name = name;
+            CustomerName = customerName;
         }
 
         public void AddRental(Movie movie, int daysRented)
@@ -17,39 +17,37 @@
             rentals.Add(movie, daysRented);
         }
 
-        public string GetName()
-        {
-            return name;
-        }
-
         public string Statement()
         {
             double totalAmount = 0;
-            int frequentRenterPoints = 0;
-            string result = "Rental Record for " + GetName() + "\n";
+            var frequentRenterPoints = 0;
+            var result = "Rental Record for " + CustomerName + "\n";
             foreach (var rental in rentals)
             {
+                var movie = rental.Key;
+                var daysRented = rental.Value;
                 double thisAmount = 0;
-                switch (rental.Key.PriceCode)
+
+                switch (movie.PriceCode)
                 {
                     case (int)MovieType.REGULAR:
                         thisAmount += 2;
-                        if (rental.Value > 2)
-                            thisAmount += (rental.Value - 2) * 1.5;
+                        if (daysRented > 2)
+                            thisAmount += (daysRented - 2) * 1.5;
                         break;
                     case (int)MovieType.NEW_RELEASE:
-                        thisAmount += rental.Value * 3;
+                        thisAmount += daysRented * 3;
                         break;
                     case (int)MovieType.CHILDREN:
                         thisAmount += 1.5;
-                        if (rental.Value > 3)
-                            thisAmount += (rental.Value - 3) * 1.5;
+                        if (daysRented > 3)
+                            thisAmount += (daysRented - 3) * 1.5;
                         break;
                 }
                 frequentRenterPoints++;
-                if ((rental.Key.PriceCode == (int)MovieType.NEW_RELEASE) && rental.Value > 1)
+                if (movie.PriceCode == (int)MovieType.NEW_RELEASE && daysRented > 1)
                     frequentRenterPoints++;
-                result += "\t" + rental.Key.Title + "\t" + thisAmount + "\n";
+                result += "\t" + movie.Title + "\t" + thisAmount + "\n";
                 totalAmount += thisAmount;
             }
             result += "Amount owed is " + totalAmount + "\n";
