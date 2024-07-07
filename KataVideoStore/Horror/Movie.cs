@@ -1,22 +1,23 @@
-﻿namespace KataVideoStore.Horror
+﻿using KataVideoStore.Horror.Models;
+
+namespace KataVideoStore.Horror
 {
     public class Movie
     {
-        public const int CHILDRENS = 2;
-        public const int REGULAR = 0;
-        public const int NEW_RELEASE = 1;
-        private string _title;
-        private int _priceCode;
 
-        public Movie(string title, int priceCode)
+
+        private string _title;
+        private PriceCode _priceCode;
+
+        public Movie(string title, PriceCode priceCode)
         {
             _title = title;
             _priceCode = priceCode;
         }
 
-        public int GetPriceCode() { return _priceCode; }
+        public PriceCode GetPriceCode() { return _priceCode; }
 
-        public void SetPriceCode(int arg) { _priceCode = arg; }
+        public void SetPriceCode(PriceCode arg) { _priceCode = arg; }
 
         public string GetTitle() { return _title; }
 

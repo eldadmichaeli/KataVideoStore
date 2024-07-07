@@ -1,4 +1,6 @@
-﻿namespace KataVideoStore.Horror
+﻿using KataVideoStore.Horror.Models;
+
+namespace KataVideoStore.Horror
 {
     using System.Collections.Generic;
 
@@ -32,22 +34,22 @@
                 double thisAmount = 0;
                 switch (rental.Key.GetPriceCode())
                 {
-                    case Movie.REGULAR:
+                    case PriceCode.Regular:
                         thisAmount += 2;
                         if (rental.Value > 2)
                             thisAmount += (rental.Value - 2) * 1.5;
                         break;
-                    case Movie.NEW_RELEASE:
+                    case PriceCode.NewRelease:
                         thisAmount += rental.Value * 3;
                         break;
-                    case Movie.CHILDRENS:
+                    case PriceCode.Childrens:
                         thisAmount += 1.5;
                         if (rental.Value > 3)
                             thisAmount += (rental.Value - 3) * 1.5;
                         break;
                 }
                 frequentRenterPoints++;
-                if ((rental.Key.GetPriceCode() == Movie.NEW_RELEASE) && rental.Value > 1)
+                if ((rental.Key.GetPriceCode() == PriceCode.NewRelease) && rental.Value > 1)
                     frequentRenterPoints++;
                 result += "\t" + rental.Key.GetTitle() + "\t" + thisAmount + "\n";
                 totalAmount += thisAmount;

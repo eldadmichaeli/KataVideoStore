@@ -47,6 +47,7 @@
     <Compile Include="Dirty\Movie.cs" />
     <Compile Include="Dirty\Rental.cs" />
     <Compile Include="Horror\Customer.cs" />
+    <Compile Include="Horror\Models\PriceCode.cs" />
     <Compile Include="Horror\Movie.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

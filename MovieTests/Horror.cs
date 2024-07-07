@@ -1,6 +1,7 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using KataVideoStore.Horror;
+using KataVideoStore.Horror.Models;
 
 
 namespace MovieTests
@@ -13,9 +14,9 @@ namespace MovieTests
         {
 
             KataVideoStore.Horror.Customer customer = new KataVideoStore.Horror.Customer("John Doe");
-            customer.AddRental(new Movie("Star Wars", Movie.NEW_RELEASE), 6);
-            customer.AddRental(new Movie("Sofia", Movie.CHILDRENS), 7);
-            customer.AddRental(new Movie("Inception", Movie.REGULAR), 5);
+            customer.AddRental(new Movie("Star Wars", PriceCode.NewRelease), 6);
+            customer.AddRental(new Movie("Sofia", PriceCode.Childrens), 7);
+            customer.AddRental(new Movie("Inception", PriceCode.Regular), 5);
 
             string expected = "Rental Record for John Doe\n"
                               + "	Star Wars	18\n"
