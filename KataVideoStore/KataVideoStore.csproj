@@ -48,6 +48,7 @@
     <Compile Include="Dirty\Rental.cs" />
     <Compile Include="Horror\Customer.cs" />
     <Compile Include="Horror\Movie.cs" />
+    <Compile Include="Horror\MovieType.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

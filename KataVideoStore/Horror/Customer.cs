@@ -30,26 +30,26 @@
             foreach (var rental in rentals)
             {
                 double thisAmount = 0;
-                switch (rental.Key.GetPriceCode())
+                switch (rental.Key.PriceCode)
                 {
-                    case Movie.REGULAR:
+                    case (int)MovieType.REGULAR:
                         thisAmount += 2;
                         if (rental.Value > 2)
                             thisAmount += (rental.Value - 2) * 1.5;
                         break;
-                    case Movie.NEW_RELEASE:
+                    case (int)MovieType.NEW_RELEASE:
                         thisAmount += rental.Value * 3;
                         break;
-                    case Movie.CHILDRENS:
+                    case (int)MovieType.CHILDREN:
                         thisAmount += 1.5;
                         if (rental.Value > 3)
                             thisAmount += (rental.Value - 3) * 1.5;
                         break;
                 }
                 frequentRenterPoints++;
-                if ((rental.Key.GetPriceCode() == Movie.NEW_RELEASE) && rental.Value > 1)
+                if ((rental.Key.PriceCode == (int)MovieType.NEW_RELEASE) && rental.Value > 1)
                     frequentRenterPoints++;
-                result += "\t" + rental.Key.GetTitle() + "\t" + thisAmount + "\n";
+                result += "\t" + rental.Key.Title + "\t" + thisAmount + "\n";
                 totalAmount += thisAmount;
             }
             result += "Amount owed is " + totalAmount + "\n";
