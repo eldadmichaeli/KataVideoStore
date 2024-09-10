@@ -43,9 +43,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Dirty\Customer.cs" />
-    <Compile Include="Dirty\Movie.cs" />
-    <Compile Include="Dirty\Rental.cs" />
     <Compile Include="Horror\Customer.cs" />
     <Compile Include="Horror\Movie.cs" />
     <Compile Include="Program.cs" />
