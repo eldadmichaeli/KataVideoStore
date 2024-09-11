@@ -45,6 +45,7 @@
   <ItemGroup>
     <Compile Include="Horror\Customer.cs" />
     <Compile Include="Horror\Movie.cs" />
+    <Compile Include="Horror\PriceCode.cs" />
     <Compile Include="Horror\Rental.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

@@ -6,6 +6,10 @@
     {
         private readonly string _name;
         private readonly List<Rental> _rentals = new List<Rental>();
+        
+        private const double BASE_REGULAR_PRICE = 2.0;
+        private const double BASE_NEWRELEASE_PRICE = 0;
+        private const double BASE_CHILDREN_PRICE = 1.5;
 
         public Customer(string name)
         {
@@ -25,22 +29,22 @@
             foreach (var rental in _rentals)
             {
                 double thisAmount = 0;
-                switch (rental.Movie.GetPriceCode())
+                switch (rental.Movie.PriceCode)
                 {
-                    case Movie.REGULAR:
+                    case PriceCode.Regular:
                         thisAmount = CalculateRegular(rental, thisAmount);
                         break;
-                    case Movie.NEW_RELEASE:
+                    case PriceCode.NewRelease:
                         thisAmount += rental.Days * 3;
                         break;
-                    case Movie.CHILDRENS:
-                        thisAmount += 1.5;
+                    case PriceCode.Children:
+                        thisAmount += BASE_CHILDREN_PRICE;
                         if (rental.Days > 3)
                             thisAmount += (rental.Days - 3) * 1.5;
                         break;
                 }
                 frequentRenterPoints++;
-                if ((rental.Movie.GetPriceCode() == Movie.NEW_RELEASE) && rental.Days > 1)
+                if ((rental.Movie.PriceCode == PriceCode.NewRelease) && rental.Days > 1)
                     frequentRenterPoints++;
                 result += "\t" + rental.Movie.GetTitle() + "\t" + thisAmount + "\n";
                 totalAmount += thisAmount;
@@ -52,7 +56,7 @@
 
         private double CalculateRegular(Rental rental, double thisAmount)
         {
-            thisAmount += 2;
+            thisAmount += BASE_REGULAR_PRICE;
             if (rental.Days > 2)
                 thisAmount += (rental.Days - 2) * 1.5;
 
