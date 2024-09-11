@@ -1,11 +1,13 @@
-﻿namespace KataVideoStore.Horror
+﻿using System.Globalization;
+
+namespace KataVideoStore.Horror
 {
     using System.Collections.Generic;
 
     public class Customer
     {
         private string name;
-        private Dictionary<Movie, int> rentals = new Dictionary<Movie, int>();
+        private Dictionary<Movie, int> rentalsDaysPerMovie = new Dictionary<Movie, int>();
 
         public Customer(string name)
         {
@@ -14,7 +16,7 @@
 
         public void AddRental(Movie movie, int daysRented)
         {
-            rentals.Add(movie, daysRented);
+            rentalsDaysPerMovie.Add(movie, daysRented);
         }
 
         public string GetName()
@@ -27,29 +29,29 @@
             double totalAmount = 0;
             int frequentRenterPoints = 0;
             string result = "Rental Record for " + GetName() + "\n";
-            foreach (var rental in rentals)
+            foreach (var rental in rentalsDaysPerMovie)
             {
                 double thisAmount = 0;
                 switch (rental.Key.GetPriceCode())
                 {
-                    case Movie.REGULAR:
+                    case MovieType.REGULAR:
                         thisAmount += 2;
                         if (rental.Value > 2)
                             thisAmount += (rental.Value - 2) * 1.5;
                         break;
-                    case Movie.NEW_RELEASE:
+                    case MovieType.NEW_RELEASE:
                         thisAmount += rental.Value * 3;
                         break;
-                    case Movie.CHILDRENS:
+                    case MovieType.CHILDRENS:
                         thisAmount += 1.5;
                         if (rental.Value > 3)
                             thisAmount += (rental.Value - 3) * 1.5;
                         break;
                 }
                 frequentRenterPoints++;
-                if ((rental.Key.GetPriceCode() == Movie.NEW_RELEASE) && rental.Value > 1)
+                if ((rental.Key.GetPriceCode() == MovieType.NEW_RELEASE) && rental.Value > 1)
                     frequentRenterPoints++;
-                result += "\t" + rental.Key.GetTitle() + "\t" + thisAmount + "\n";
+                result += "\t" + rental.Key.GetTitle() + "\t" + thisAmount.ToString(CultureInfo.InvariantCulture) + "\n";
                 totalAmount += thisAmount;
             }
             result += "Amount owed is " + totalAmount + "\n";
