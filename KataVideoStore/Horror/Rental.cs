@@ -3,6 +3,8 @@
     public class Rental
     {
         private const double Coefficient = 1.5;
+        private const int Zero = 0;
+        private const int One = 1;
         private const int Two = 2;
         private const int Three = 3;
         public Movie Movie { get; }
@@ -25,7 +27,7 @@
                 case PriceCodeType.Children:
                     return CalculatePrice(Three, Coefficient);
                 default:
-                    return 0;
+                    return Zero;
             }
         }
         
@@ -33,6 +35,6 @@
             _daysRented > rented ? coefficient + (_daysRented - rented) * Coefficient : coefficient;
         
         public int GetFrequentRenterPoints() => 
-            Movie.PriceCode == PriceCodeType.NewRelease && _daysRented > 1 ? 2 : 1;
+            Movie.PriceCode == PriceCodeType.NewRelease && _daysRented > One ? Two : One;
     }
 }

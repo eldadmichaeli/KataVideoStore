@@ -2,8 +2,6 @@
 
 namespace KataVideoStore.Horror
 {
-    using System.Collections.Generic;
-
     public class Customer
     {
         private string Name { get; }

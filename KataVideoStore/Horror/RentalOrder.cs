@@ -13,15 +13,11 @@ namespace KataVideoStore.Horror
             _rentals.Add(rental);
         }
 
-        public double CalculateTotalPrice()
-        {
-            return _rentals.Sum(rental => rental.GetCharge());
-        }
+        public double CalculateTotalPrice() =>
+            _rentals.Sum(rental => rental.GetCharge());
 
-        public int CalculateFrequentRentalPoints()
-        {
-            return _rentals.Sum(rental => rental.GetFrequentRenterPoints());
-        }
+        public int CalculateFrequentRentalPoints() =>
+            _rentals.Sum(rental => rental.GetFrequentRenterPoints());
 
         public string PrintRentals()
         {
