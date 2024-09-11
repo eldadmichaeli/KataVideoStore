@@ -1,60 +1,55 @@
-﻿namespace KataVideoStore.Horror
+﻿using System.Text;
+
+namespace KataVideoStore.Horror
 {
     using System.Collections.Generic;
 
     public class Customer
     {
-        private string name;
-        private Dictionary<Movie, int> rentals = new Dictionary<Movie, int>();
+        private string Name { get; }
+        private readonly Dictionary<Movie, int> _rentals;
 
         public Customer(string name)
         {
-            this.name = name;
+            Name = name;
+            _rentals = new Dictionary<Movie, int>();
         }
 
         public void AddRental(Movie movie, int daysRented)
         {
-            rentals.Add(movie, daysRented);
-        }
-
-        public string GetName()
-        {
-            return name;
+            _rentals.Add(movie, daysRented);
         }
 
         public string Statement()
         {
             double totalAmount = 0;
             int frequentRenterPoints = 0;
-            string result = "Rental Record for " + GetName() + "\n";
-            foreach (var rental in rentals)
+            StringBuilder result = new StringBuilder();
+            result.Append($"Rental Record for { Name }\n");
+            foreach (var rental in _rentals)
             {
                 double thisAmount = 0;
-                switch (rental.Key.GetPriceCode())
+                switch (rental.Key.PriceCode)
                 {
-                    case Movie.REGULAR:
-                        thisAmount += 2;
-                        if (rental.Value > 2)
-                            thisAmount += (rental.Value - 2) * 1.5;
+                    case Movie.Regular:
+                        thisAmount += rental.Value > 2 ? 2 + (rental.Value - 2) * 1.5 : 2;
                         break;
-                    case Movie.NEW_RELEASE:
+                    case Movie.NewRelease:
                         thisAmount += rental.Value * 3;
                         break;
-                    case Movie.CHILDRENS:
-                        thisAmount += 1.5;
-                        if (rental.Value > 3)
-                            thisAmount += (rental.Value - 3) * 1.5;
+                    case Movie.Children:
+                        thisAmount += rental.Value > 3 ? 1.5 + (rental.Value - 3) * 1.5 : 1.5;
                         break;
                 }
                 frequentRenterPoints++;
-                if ((rental.Key.GetPriceCode() == Movie.NEW_RELEASE) && rental.Value > 1)
+                if (rental.Key.PriceCode == Movie.NewRelease && rental.Value > 1)
                     frequentRenterPoints++;
-                result += "\t" + rental.Key.GetTitle() + "\t" + thisAmount + "\n";
+                result.Append($"\t{rental.Key.Title}\t{thisAmount}\n");
                 totalAmount += thisAmount;
             }
-            result += "Amount owed is " + totalAmount + "\n";
-            result += "You earned " + frequentRenterPoints + " frequent renter points";
-            return result;
+            result.Append($"Amount owed is {totalAmount}\n");
+            result.Append($"You earned {frequentRenterPoints} frequent renter points");
+            return result.ToString();
         }
     }
 }

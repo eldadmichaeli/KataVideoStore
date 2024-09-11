@@ -13,9 +13,9 @@ namespace MovieTests
         {
 
             KataVideoStore.Horror.Customer customer = new KataVideoStore.Horror.Customer("John Doe");
-            customer.AddRental(new Movie("Star Wars", Movie.NEW_RELEASE), 6);
-            customer.AddRental(new Movie("Sofia", Movie.CHILDRENS), 7);
-            customer.AddRental(new Movie("Inception", Movie.REGULAR), 5);
+            customer.AddRental(new Movie("Star Wars", Movie.NewRelease), 6);
+            customer.AddRental(new Movie("Sofia", Movie.Children), 7);
+            customer.AddRental(new Movie("Inception", Movie.Regular), 5);
 
             string expected = "Rental Record for John Doe\n"
                               + "	Star Wars	18\n"
