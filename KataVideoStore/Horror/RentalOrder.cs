@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace KataVideoStore.Horror
@@ -14,36 +15,20 @@ namespace KataVideoStore.Horror
 
         public double CalculateTotalPrice()
         {
-            double total = 0;
-            foreach (var rental in _rentals)
-            {
-                total += rental.GetCharge();
-            }
-
-            return total;
+            return _rentals.Sum(rental => rental.GetCharge());
         }
 
         public int CalculateFrequentRentalPoints()
         {
-            int total = 0;
-            foreach (var rental in _rentals)
-            {
-                total += rental.GetFrequentRenterPoints();
-            }
-
-            return total;
+            return _rentals.Sum(rental => rental.GetFrequentRenterPoints());
         }
 
         public string PrintRentals()
         {
-            StringBuilder result = new StringBuilder();
-
-            foreach (var rental in _rentals)
-            {
-                result.Append($"\t{rental.Movie.Title}\t{rental.GetCharge()}\n");
-            }
-
-            return result.ToString();
+            return _rentals
+                .Select(rental => $"\t{rental.Movie.Title}\t{rental.GetCharge()}\n")
+                .Aggregate(new StringBuilder(), (sb, s) => sb.Append(s))
+                .ToString();
         }
     }
 }

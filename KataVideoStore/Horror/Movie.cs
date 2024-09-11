@@ -2,7 +2,6 @@
 {
     public class Movie
     {
-
         public string Title { get; }
         public PriceCodeType PriceCode { get; }
 
