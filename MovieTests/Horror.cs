@@ -10,9 +10,9 @@ namespace MovieTests
         public void CharacterizationTest()
         {
             Customer customer = new Customer("John Doe");
-            customer.AddRental(new Movie("Star Wars", PriceCodeType.NewRelease), 6);
-            customer.AddRental(new Movie("Sofia", PriceCodeType.Children), 7);
-            customer.AddRental(new Movie("Inception", PriceCodeType.Regular), 5);
+            customer.AddRental(new Rental(new Movie("Star Wars", PriceCodeType.NewRelease), 6));
+            customer.AddRental(new Rental(new Movie("Sofia", PriceCodeType.Children), 7));
+            customer.AddRental(new Rental(new Movie("Inception", PriceCodeType.Regular), 5));
 
             const string Expected = "Rental Record for John Doe\n"
                                     + "	Star Wars	18\n"
@@ -21,7 +21,7 @@ namespace MovieTests
                                     + "Amount owed is 32\n"
                                     + "You earned 4 frequent renter points";
 
-            Assert.AreEqual(Expected, customer.Statement());
+            Assert.AreEqual(Expected, customer.CalculateStatement());
         }
     }
 }

@@ -7,64 +7,32 @@ namespace KataVideoStore.Horror
     public class Customer
     {
         private string Name { get; }
-        private readonly Dictionary<Movie, int> _rentals;
+        private readonly RentalOrder _rentalOrder;
 
         public Customer(string name)
         {
             Name = name;
-            _rentals = new Dictionary<Movie, int>();
+            _rentalOrder = new RentalOrder();
         }
 
-        public void AddRental(Movie movie, int daysRented)
+        public void AddRental(Rental rental)
         {
-            _rentals.Add(movie, daysRented);
+            _rentalOrder.AddRental(rental);
         }
 
-        public string Statement()
+        public string CalculateStatement()
         {
-            double totalAmount = 0;
-            int frequentRenterPoints = 0;
             var result = new StringBuilder();
 
             result.Append($"Rental Record for {Name}\n");
-
-            foreach (var rental in _rentals)
-            {
-                var thisAmount = CalculateAmount(rental.Key.PriceCode, rental.Value);
-
-                frequentRenterPoints++;
-
-                if (rental.Key.PriceCode == PriceCodeType.NewRelease && rental.Value > 1)
-                    frequentRenterPoints++;
-
-                result.Append($"\t{rental.Key.Title}\t{thisAmount}\n");
-                totalAmount += thisAmount;
-            }
+            result.Append(_rentalOrder.PrintRentals());
+            double totalAmount = _rentalOrder.CalculateTotalPrice();
+            int frequentRenterPoints = _rentalOrder.CalculateFrequentRentalPoints();
 
             result.Append($"Amount owed is {totalAmount}\n");
             result.Append($"You earned {frequentRenterPoints} frequent renter points");
 
             return result.ToString();
-        }
-
-        private static double CalculateAmount(PriceCodeType priceCode, int rentalValue)
-        {
-            double amount = 0;
-
-            switch (priceCode)
-            {
-                case PriceCodeType.Regular:
-                    amount += rentalValue > 2 ? 2 + (rentalValue - 2) * 1.5 : 2;
-                    break;
-                case PriceCodeType.NewRelease:
-                    amount += rentalValue * 3;
-                    break;
-                case PriceCodeType.Children:
-                    amount += rentalValue > 3 ? 1.5 + (rentalValue - 3) * 1.5 : 1.5;
-                    break;
-            }
-
-            return amount;
         }
     }
 }
