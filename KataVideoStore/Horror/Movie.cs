@@ -2,27 +2,16 @@
 {
     public class Movie
     {
-        private string _title;
-        private MovieType _priceCode;
-
-        public Movie(string title, MovieType priceCode)
+        
+        public Movie(string title, PriceCategory priceCode)
         {
-            _title = title;
-            _priceCode = priceCode;
+            Title = title;
+            PriceCode = priceCode;
         }
 
-        public MovieType GetPriceCode() { return _priceCode; }
+        public PriceCategory PriceCode { get; }
+      
+        public string Title { get; }
 
-        public void SetPriceCode(MovieType arg) { _priceCode = arg; }
-
-        public string GetTitle() { return _title; }
-
-
-    }
-    public enum MovieType
-    {
-        REGULAR,
-        NEW_RELEASE,
-        CHILDRENS
     }
 }
