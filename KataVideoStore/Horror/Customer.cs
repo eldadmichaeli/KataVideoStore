@@ -1,4 +1,5 @@
-﻿using System.Globalization;
+﻿using System;
+using System.Globalization;
 
 namespace KataVideoStore.Horror
 {
@@ -25,38 +26,48 @@ namespace KataVideoStore.Horror
         }
 
         public string Statement()
-        {
+        { 
             double totalAmount = 0;
             int frequentRenterPoints = 0;
             string result = "Rental Record for " + GetName() + "\n";
             foreach (var rental in rentalsDaysPerMovie)
             {
-                double thisAmount = 0;
-                switch (rental.Key.GetPriceCode())
-                {
-                    case MovieType.REGULAR:
-                        thisAmount += 2;
-                        if (rental.Value > 2)
-                            thisAmount += (rental.Value - 2) * 1.5;
-                        break;
-                    case MovieType.NEW_RELEASE:
-                        thisAmount += rental.Value * 3;
-                        break;
-                    case MovieType.CHILDRENS:
-                        thisAmount += 1.5;
-                        if (rental.Value > 3)
-                            thisAmount += (rental.Value - 3) * 1.5;
-                        break;
-                }
+                var rentalPrice = GetTotalRentalPricePerMovie(rental.Key, rental.Value);
+                
                 frequentRenterPoints++;
-                if ((rental.Key.GetPriceCode() == MovieType.NEW_RELEASE) && rental.Value > 1)
+                if ((rental.Key.PriceCode == PriceCategory.NewRelease) && rental.Value > 1)
                     frequentRenterPoints++;
-                result += "\t" + rental.Key.GetTitle() + "\t" + thisAmount.ToString(CultureInfo.InvariantCulture) + "\n";
-                totalAmount += thisAmount;
+                result += "\t" + rental.Key.Title + "\t" + rentalPrice.ToString(CultureInfo.InvariantCulture) + "\n";
+                totalAmount += rentalPrice;
             }
             result += "Amount owed is " + totalAmount + "\n";
             result += "You earned " + frequentRenterPoints + " frequent renter points";
             return result;
+        }
+
+        public static double GetTotalRentalPricePerMovie(Movie movie, int numberOfDays)
+        {
+            switch (movie.PriceCode)
+            {
+                case PriceCategory.Regular:
+                    return ApplyPriceWithLateFee(2, 2, numberOfDays);
+                case PriceCategory.NewRelease:
+                    return numberOfDays * 3;
+                case PriceCategory.Childrens:
+                    return ApplyPriceWithLateFee(1.5, 3, numberOfDays);
+                default:
+                    throw new NotImplementedException("Price category not implemented");
+            }
+        }
+        
+        public static double ApplyPriceWithLateFee(double price, int allowedDays, int totalDaysRented)
+        {
+            if (totalDaysRented > allowedDays)
+            {
+                return (totalDaysRented - allowedDays) * 1.5 + price;    
+            }
+
+            return price;
         }
     }
 }
