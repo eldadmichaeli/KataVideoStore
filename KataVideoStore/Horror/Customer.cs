@@ -1,11 +1,14 @@
-﻿namespace KataVideoStore.Horror
+﻿using System;
+using System.Globalization;
+
+namespace KataVideoStore.Horror
 {
     using System.Collections.Generic;
 
     public class Customer
     {
         private string name;
-        private Dictionary<Movie, int> rentals = new Dictionary<Movie, int>();
+        private Dictionary<Movie, int> rentalsDaysPerMovie = new Dictionary<Movie, int>();
 
         public Customer(string name)
         {
@@ -14,7 +17,7 @@
 
         public void AddRental(Movie movie, int daysRented)
         {
-            rentals.Add(movie, daysRented);
+            rentalsDaysPerMovie.Add(movie, daysRented);
         }
 
         public string GetName()
@@ -23,38 +26,48 @@
         }
 
         public string Statement()
-        {
+        { 
             double totalAmount = 0;
             int frequentRenterPoints = 0;
             string result = "Rental Record for " + GetName() + "\n";
-            foreach (var rental in rentals)
+            foreach (var rental in rentalsDaysPerMovie)
             {
-                double thisAmount = 0;
-                switch (rental.Key.GetPriceCode())
-                {
-                    case Movie.REGULAR:
-                        thisAmount += 2;
-                        if (rental.Value > 2)
-                            thisAmount += (rental.Value - 2) * 1.5;
-                        break;
-                    case Movie.NEW_RELEASE:
-                        thisAmount += rental.Value * 3;
-                        break;
-                    case Movie.CHILDRENS:
-                        thisAmount += 1.5;
-                        if (rental.Value > 3)
-                            thisAmount += (rental.Value - 3) * 1.5;
-                        break;
-                }
+                var rentalPrice = GetTotalRentalPricePerMovie(rental.Key, rental.Value);
+                
                 frequentRenterPoints++;
-                if ((rental.Key.GetPriceCode() == Movie.NEW_RELEASE) && rental.Value > 1)
+                if ((rental.Key.PriceCode == PriceCategory.NewRelease) && rental.Value > 1)
                     frequentRenterPoints++;
-                result += "\t" + rental.Key.GetTitle() + "\t" + thisAmount + "\n";
-                totalAmount += thisAmount;
+                result += "\t" + rental.Key.Title + "\t" + rentalPrice.ToString(CultureInfo.InvariantCulture) + "\n";
+                totalAmount += rentalPrice;
             }
             result += "Amount owed is " + totalAmount + "\n";
             result += "You earned " + frequentRenterPoints + " frequent renter points";
             return result;
+        }
+
+        public static double GetTotalRentalPricePerMovie(Movie movie, int numberOfDays)
+        {
+            switch (movie.PriceCode)
+            {
+                case PriceCategory.Regular:
+                    return ApplyPriceWithLateFee(2, 2, numberOfDays);
+                case PriceCategory.NewRelease:
+                    return numberOfDays * 3;
+                case PriceCategory.Childrens:
+                    return ApplyPriceWithLateFee(1.5, 3, numberOfDays);
+                default:
+                    throw new NotImplementedException("Price category not implemented");
+            }
+        }
+        
+        public static double ApplyPriceWithLateFee(double price, int allowedDays, int totalDaysRented)
+        {
+            if (totalDaysRented > allowedDays)
+            {
+                return (totalDaysRented - allowedDays) * 1.5 + price;    
+            }
+
+            return price;
         }
     }
 }
