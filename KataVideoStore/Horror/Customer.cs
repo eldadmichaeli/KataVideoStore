@@ -4,6 +4,9 @@ namespace KataVideoStore.Horror
 {
     public class Customer
     {
+        private const string RentalRecordLine = "Rental Record for ";
+        private const string AmountLine = "Amount owed is ";
+        private const string EarnedLine = "You earned {0} frequent renter points";
         private string Name { get; }
         private readonly RentalOrder _rentalOrder;
 
@@ -22,13 +25,13 @@ namespace KataVideoStore.Horror
         {
             var result = new StringBuilder();
 
-            result.Append($"Rental Record for {Name}\n");
+            result.Append($"{RentalRecordLine}{Name}\n");
             result.Append(_rentalOrder.PrintRentals());
             double totalAmount = _rentalOrder.CalculateTotalPrice();
             int frequentRenterPoints = _rentalOrder.CalculateFrequentRentalPoints();
 
-            result.Append($"Amount owed is {totalAmount}\n");
-            result.Append($"You earned {frequentRenterPoints} frequent renter points");
+            result.Append($"{AmountLine}{totalAmount}\n");
+            result.AppendFormat(EarnedLine, frequentRenterPoints);
 
             return result.ToString();
         }
