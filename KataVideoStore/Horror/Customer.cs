@@ -26,10 +26,12 @@ namespace KataVideoStore.Horror
         }
 
         public string Statement()
-        { 
+        {
+            List<(string Movie, double Price)> rentals = new List<(string Movie, double Price)>();
+
             double totalAmount = 0;
             int frequentRenterPoints = 0;
-            string result = "Rental Record for " + GetName() + "\n";
+            
             foreach (var rental in rentalsDaysPerMovie)
             {
                 var rentalPrice = GetTotalRentalPricePerMovie(rental.Key, rental.Value);
@@ -37,12 +39,12 @@ namespace KataVideoStore.Horror
                 frequentRenterPoints++;
                 if ((rental.Key.PriceCode == PriceCategory.NewRelease) && rental.Value > 1)
                     frequentRenterPoints++;
-                result += "\t" + rental.Key.Title + "\t" + rentalPrice.ToString(CultureInfo.InvariantCulture) + "\n";
+                rentals.Add((rental.Key.Title, rentalPrice));
+
                 totalAmount += rentalPrice;
             }
-            result += "Amount owed is " + totalAmount + "\n";
-            result += "You earned " + frequentRenterPoints + " frequent renter points";
-            return result;
+
+            return BuildResult(rentals, totalAmount, frequentRenterPoints);
         }
 
         public static double GetTotalRentalPricePerMovie(Movie movie, int numberOfDays)
@@ -68,6 +70,21 @@ namespace KataVideoStore.Horror
             }
 
             return price;
+        }
+
+        private string BuildResult(List<(string Movie, double Price)> rentals, double totalAmount, int frequentRenterPoints)
+        {
+            string result = "Rental Record for " + GetName() + "\n";
+
+            foreach (var rental in rentals)
+            {
+                result += "\t" + rental.Movie + "\t" + rental.Price.ToString(CultureInfo.InvariantCulture) + "\n";
+            }
+            
+            result += "Amount owed is " + totalAmount + "\n";
+            result += "You earned " + frequentRenterPoints + " frequent renter points";
+
+            return result;
         }
     }
 }
